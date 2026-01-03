@@ -1,0 +1,8 @@
+{
+  "name": "Prism Nexus",
+  "description": "High-performance landing page and anonymous AI agent orchestration platform.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
