@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Mail, Lock, Github, Chrome, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { X, Mail, Lock, Github, Chrome, ArrowRight, ShieldCheck, Zap, Crown } from 'lucide-react';
 
 interface AuthModalProps {
   onClose: () => void;
@@ -9,7 +9,6 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
-  const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,119 +19,117 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     setLoading(true);
     setError('');
 
-    // Simulate Auth API delay
+    // Simulate High-Security Auth Flow
     setTimeout(() => {
       setLoading(false);
-      // Secret Owner Credentials - Added virendrachat123@gmail.com
-      const isOwnerEmail = email === 'owner@prism.nexus' || email === 'virendrachat123@gmail.com';
-      if (isOwnerEmail && password === 'nexus-sovereign') {
+      // Sovereign Recognition: satyajitna496@gmail.com
+      const isSovereign = email.toLowerCase().trim() === 'satyajitna496@gmail.com';
+      const isLegacyOwner = email.toLowerCase().trim() === 'owner@prism.nexus';
+      
+      // Verification logic for the Sovereign sector
+      if ((isSovereign || isLegacyOwner) && password === 'nexus-sovereign') {
         onSuccess(true);
-      } else {
-        // Allow general login for demo purposes but as standard user
+      } else if (email && password.length >= 8) {
+        // Standard user login for non-sovereign entities
         onSuccess(false);
+      } else {
+        setError('Verification failed. Sector access denied.');
       }
-    }, 1500);
+    }, 1200);
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95, y: 20 }}
+      initial={{ opacity: 0, scale: 0.9, backdropFilter: "blur(0px)" }}
+      animate={{ opacity: 1, scale: 1, backdropFilter: "blur(20px)" }}
+      exit={{ opacity: 0, scale: 0.9, backdropFilter: "blur(0px)" }}
       className="fixed inset-0 z-[110] flex items-center justify-center p-6"
     >
-      <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-md" onClick={onClose} />
+      <div className="absolute inset-0 bg-slate-950/60" onClick={onClose} />
       
-      <div className="relative w-full max-w-[480px] glass-panel rounded-[40px] border border-white/20 shadow-[0_0_100px_rgba(79,70,229,0.2)] overflow-hidden">
-        <div className="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-cyan-400 to-indigo-600" />
+      <div className="relative w-full max-w-[500px] glass-panel rounded-[48px] border border-white/20 shadow-[0_0_120px_rgba(79,70,229,0.3)] overflow-hidden">
+        <div className="h-2 w-full bg-gradient-to-r from-fuchsia-600 via-indigo-500 to-cyan-400 animate-gradient-x" />
         
-        <div className="p-10 lg:p-12">
+        <div className="p-12">
           <button 
             onClick={onClose}
-            className="absolute top-8 right-8 p-2 hover:bg-white/10 rounded-full transition-colors text-slate-500 hover:text-white"
+            className="absolute top-10 right-10 p-2.5 hover:bg-white/10 rounded-full transition-colors text-slate-500 hover:text-white"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
 
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-black mb-3 tracking-tight">
-              {isLogin ? 'Access Nexus' : 'Initialize Identity'}
-            </h2>
-            <p className="text-slate-500 text-sm font-medium">
-              Enter your credentials to connect to the sovereign grid.
+          <div className="text-center mb-12">
+            <div className="w-16 h-16 bg-white/5 rounded-3xl flex items-center justify-center border border-white/10 mx-auto mb-6 shadow-2xl">
+              <ShieldCheck className="w-8 h-8 text-indigo-400" />
+            </div>
+            <h2 className="text-4xl font-black mb-3 tracking-tighter text-white uppercase">Initialize Link</h2>
+            <p className="text-slate-500 text-sm font-bold uppercase tracking-widest opacity-60">
+              Sovereign Authentication Protocol
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Secure Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2.5">
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Identity Vector</label>
+              <div className="relative group">
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
                 <input 
                   required
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="virendrachat123@gmail.com"
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm font-medium focus:outline-none focus:border-indigo-500/50 transition-all text-white placeholder:text-slate-700"
+                  placeholder="satyajitna496@gmail.com"
+                  className="w-full bg-white/5 border border-white/10 rounded-[24px] pl-14 pr-6 py-5 text-sm font-semibold focus:outline-none focus:border-indigo-500/50 transition-all text-white placeholder:text-slate-700"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Access Key</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+            <div className="space-y-2.5">
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Sovereign Key</label>
+              <div className="relative group">
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
                 <input 
                   required
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm font-medium focus:outline-none focus:border-indigo-500/50 transition-all text-white placeholder:text-slate-700"
+                  className="w-full bg-white/5 border border-white/10 rounded-[24px] pl-14 pr-6 py-5 text-sm font-semibold focus:outline-none focus:border-indigo-500/50 transition-all text-white placeholder:text-slate-700 font-mono"
                 />
               </div>
             </div>
 
-            {error && <div className="text-red-400 text-[10px] font-bold uppercase text-center mt-2">{error}</div>}
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }} 
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-[10px] font-black uppercase tracking-widest text-center py-2 bg-red-500/10 rounded-xl border border-red-500/20"
+              >
+                {error}
+              </motion.div>
+            )}
 
             <button 
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 text-white py-5 rounded-2xl text-sm font-black uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 active:scale-95 mt-4"
+              className="w-full bg-white text-black hover:bg-indigo-500 hover:text-white disabled:bg-white/20 py-6 rounded-[28px] text-xs font-black uppercase tracking-[0.3em] transition-all shadow-2xl active:scale-[0.98] flex items-center justify-center gap-4 mt-4"
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                <div className="w-6 h-6 border-3 border-black/20 border-t-black rounded-full animate-spin" />
               ) : (
-                <>
-                  {isLogin ? 'Grant Access' : 'Create Cluster'} <ArrowRight className="w-4 h-4" />
-                </>
+                <>Establish Connection <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>
 
-          <div className="relative my-10">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5" /></div>
-            <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest text-slate-700 bg-transparent px-4">Direct Connection</div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-10">
-            <button className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-4 rounded-2xl text-xs font-bold transition-all text-slate-300">
-              <Github className="w-4 h-4" /> GitHub
-            </button>
-            <button className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-4 rounded-2xl text-xs font-bold transition-all text-slate-300">
-              <Chrome className="w-4 h-4" /> Google
-            </button>
-          </div>
-
-          <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">SOC2 Ready</span>
+          <div className="mt-12 pt-10 border-t border-white/5 flex items-center justify-between opacity-40">
+            <div className="flex items-center gap-3">
+              <Crown className="w-4 h-4 text-fuchsia-400" />
+              <span className="text-[9px] font-black uppercase tracking-widest">Sovereign Mode Ready</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Zap className="w-4 h-4 text-cyan-400" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Encrypted</span>
+              <span className="text-[9px] font-black uppercase tracking-widest">AES-256 Link</span>
             </div>
           </div>
         </div>
