@@ -93,13 +93,13 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     setIsProcessing(true);
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: mediaPrompt }] },
         config: {
           imageConfig: { aspectRatio: mediaAspectRatio, imageSize: mediaSize },
-          tools: [{ googleSearch: {} }] // Pro image supports search grounding for concepts
+          tools: [{ googleSearch: {} }] 
         }
       });
       
@@ -119,7 +119,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     setIsProcessing(true);
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       let op = await ai.models.generateVideos({
         model: 'veo-3.1-fast-generate-preview',
         prompt: mediaPrompt,
@@ -154,7 +154,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     }
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       audioContextRef.current = audioCtx;
       
@@ -221,7 +221,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     try {
       await checkApiKey();
       const coords = await getCoordinates();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       
       const response = await ai.models.generateContent({
         model: thinkingMode ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview',
@@ -261,7 +261,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     setIsProcessing(true);
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       const base64 = await blobToBase64(uploadFile);
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
@@ -361,7 +361,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
                   <section className="space-y-6">
                     <h3 className="label-premium text-slate-500">Source Material</h3>
                     <div className="relative group aspect-video rounded-[32px] border-2 border-dashed border-white/10 flex flex-col items-center justify-center bg-white/5 overflow-hidden transition-all hover:border-indigo-500/50">
-                      {uploadPreview ? <img src={uploadPreview} className="w-full h-full object-cover" /> : <ImageIcon className="w-12 h-12 opacity-10" />}
+                      {uploadPreview ? <img src={uploadPreview} className="w-full h-full object-cover" alt="Source Preview" /> : <ImageIcon className="w-12 h-12 opacity-10" />}
                       <input type="file" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
                     </div>
                   </section>
@@ -373,7 +373,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
                 </div>
                 <div className="col-span-8 bg-[#010206] p-12 flex items-center justify-center relative">
                    {isProcessing && <div className="absolute inset-0 z-20 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8"><div className="w-24 h-24 border-4 border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin" /><span className="text-white font-black text-xs uppercase tracking-[0.5em] animate-pulse">Rendering Reality...</span></div>}
-                   {generatedImageUrl && <img src={generatedImageUrl} className="max-w-full max-h-full rounded-[40px] shadow-[0_50px_100px_rgba(0,0,0,0.8)] border border-white/10" />}
+                   {generatedImageUrl && <img src={generatedImageUrl} className="max-w-full max-h-full rounded-[40px] shadow-[0_50px_100px_rgba(0,0,0,0.8)] border border-white/10" alt="Generated Content" />}
                    {generatedVideoUrl && <video src={generatedVideoUrl} controls autoPlay loop className="max-w-full max-h-full rounded-[40px] shadow-[0_50px_100px_rgba(0,0,0,0.8)] border border-white/10" />}
                    {!generatedImageUrl && !generatedVideoUrl && <div className="opacity-5 text-center"><ImageIcon className="w-80 h-80 mx-auto" /><h4 className="text-6xl font-black uppercase tracking-[0.3em] mt-12">Standby</h4></div>}
                 </div>
@@ -394,7 +394,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
                         {m.sources && (
                           <div className="flex flex-wrap gap-3">
                             {m.sources.map((s, idx) => (
-                              <a key={idx} href={s.uri} target="_blank" rel="noopener" className="flex items-center gap-2.5 px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-slate-400 font-black tracking-widest uppercase hover:bg-white hover:text-black transition-all">
+                              <a key={`${idx}-${s.uri}`} href={s.uri} target="_blank" rel="noopener" className="flex items-center gap-2.5 px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-slate-400 font-black tracking-widest uppercase hover:bg-white hover:text-black transition-all">
                                  {s.type === 'web' ? <Search className="w-3.5 h-3.5" /> : <MapPin className="w-3.5 h-3.5" />} {s.title}
                               </a>
                             ))}
@@ -424,7 +424,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
                     {thinkingMode && <div className="absolute -top-1 -right-1 w-3 h-3 bg-fuchsia-500 rounded-full animate-ping" />}
                   </button>
                   <input value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleChat()} placeholder="Issue sovereign command..." className="flex-grow bg-white/5 border border-white/10 rounded-[32px] px-10 py-6 text-sm focus:outline-none focus:border-indigo-500/50 transition-all font-medium text-white" />
-                  <button handleChat={handleChat} className="p-5 bg-white text-black rounded-3xl hover:bg-indigo-500 hover:text-white transition-all shadow-2xl active:scale-95"><Send className="w-7 h-7" /></button>
+                  <button onClick={handleChat} className="p-5 bg-white text-black rounded-3xl hover:bg-indigo-500 hover:text-white transition-all shadow-2xl active:scale-95"><Send className="w-7 h-7" /></button>
                 </div>
               </motion.div>
             )}
@@ -465,7 +465,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
                           <v.icon className={`w-20 h-20 ${v.color}`} />
                           <h3 className="text-4xl font-black text-white uppercase tracking-tighter">{v.title}</h3>
                           <div className="aspect-video bg-white/5 rounded-[40px] border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden relative group">
-                             {uploadPreview ? <img src={uploadPreview} className="w-full h-full object-cover" /> : <v.icon className="w-16 h-16 opacity-10" />}
+                             {uploadPreview ? <img src={uploadPreview} className="w-full h-full object-cover" alt="Vision Target" /> : <v.icon className="w-16 h-16 opacity-10" />}
                              <input type="file" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
                              <div className="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span className="text-white text-[10px] font-black uppercase tracking-widest">Injest Source</span>

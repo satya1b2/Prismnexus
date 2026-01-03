@@ -10,7 +10,7 @@ import { Footer } from './components/Footer';
 import { NexusConsole } from './components/NexusConsole';
 import { AuthModal } from './components/AuthModal';
 import { FloatingChatbot } from './components/FloatingChatbot';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const App: React.FC = () => {
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
@@ -19,7 +19,6 @@ const App: React.FC = () => {
   const [isOwner, setIsOwner] = useState(false);
 
   const handleLaunchRequest = () => {
-    // To allow owner login at any time and ensure security, we always show auth if not already validated as owner
     if (isLoggedIn && isOwner) {
       setIsConsoleOpen(true);
     } else {
@@ -59,6 +58,7 @@ const App: React.FC = () => {
       <AnimatePresence>
         {isAuthOpen && (
           <AuthModal 
+            key="auth-modal"
             onClose={() => setIsAuthOpen(false)} 
             onSuccess={handleAuthSuccess} 
           />
@@ -67,10 +67,16 @@ const App: React.FC = () => {
 
       <AnimatePresence>
         {isConsoleOpen && (
-          <>
-            <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[90]" onClick={() => setIsConsoleOpen(false)} />
-            <NexusConsole isOwner={isOwner} onClose={() => setIsConsoleOpen(false)} />
-          </>
+          <div key="console-overlay" className="fixed inset-0 z-[90] flex items-center justify-center">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" 
+              onClick={() => setIsConsoleOpen(false)} 
+            />
+            <NexusConsole key="nexus-console-main" isOwner={isOwner} onClose={() => setIsConsoleOpen(false)} />
+          </div>
         )}
       </AnimatePresence>
     </div>

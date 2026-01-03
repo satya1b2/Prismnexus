@@ -19,18 +19,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     setLoading(true);
     setError('');
 
-    // Simulate High-Security Auth Flow
+    // High-Security Authentication Mock Flow
     setTimeout(() => {
       setLoading(false);
-      // Sovereign Recognition: satyajitna496@gmail.com
-      const isSovereign = email.toLowerCase().trim() === 'satyajitna496@gmail.com';
-      const isLegacyOwner = email.toLowerCase().trim() === 'owner@prism.nexus';
+      const normalizedEmail = email.toLowerCase().trim();
       
-      // Verification logic for the Sovereign sector
-      if ((isSovereign || isLegacyOwner) && password === 'nexus-sovereign') {
+      // Recognition of Sovereign Identities
+      const isSatyajit = normalizedEmail === 'satyajitna496@gmail.com';
+      const isLegacyOwner = normalizedEmail === 'owner@prism.nexus';
+      
+      if ((isSatyajit || isLegacyOwner) && password === 'nexus-sovereign') {
         onSuccess(true);
-      } else if (email && password.length >= 8) {
-        // Standard user login for non-sovereign entities
+      } else if (normalizedEmail && password.length >= 8) {
+        // Standard User Access
         onSuccess(false);
       } else {
         setError('Verification failed. Sector access denied.');
