@@ -1,8 +1,15 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import * as LucideIcons from 'lucide-react';
+import { Target, Activity, Settings, Shield } from 'lucide-react';
 import { USE_CASES } from '../constants';
+
+const ICON_MAP: Record<string, React.ReactNode> = {
+  Target: <Target className="w-6 h-6 text-indigo-400" />,
+  Activity: <Activity className="w-6 h-6 text-indigo-400" />,
+  Settings: <Settings className="w-6 h-6 text-indigo-400" />,
+  Shield: <Shield className="w-6 h-6 text-indigo-400" />,
+};
 
 export const UseCases: React.FC = () => {
   return (
@@ -17,7 +24,7 @@ export const UseCases: React.FC = () => {
 
         <div className="grid sm:grid-cols-2 gap-8">
           {USE_CASES.map((useCase, i) => {
-            const Icon = (LucideIcons as any)[useCase.iconName];
+            const IconComponent = ICON_MAP[useCase.iconName] || <Target className="w-6 h-6 text-indigo-400" />;
             return (
               <motion.div
                 key={i}
@@ -28,7 +35,7 @@ export const UseCases: React.FC = () => {
                 className="flex gap-6 p-8 rounded-3xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
               >
                 <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-indigo-400" />
+                  {IconComponent}
                 </div>
                 <div>
                   <h3 className="text-xl font-bold mb-2">{useCase.title}</h3>

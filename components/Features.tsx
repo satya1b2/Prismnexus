@@ -15,7 +15,7 @@ export const Features: React.FC = () => {
       </div>
 
       <div className="bento-grid h-[900px]">
-        {/* Main Orchestration Card */}
+        {/* Main Orchestration Card - Option 1 */}
         <motion.div 
           whileHover={{ y: -8 }}
           className="col-span-12 lg:col-span-8 row-span-2 glass-panel p-16 rounded-[60px] overflow-hidden relative group"
@@ -24,8 +24,8 @@ export const Features: React.FC = () => {
           <div className="relative z-10 max-w-md">
             <Workflow className="w-14 h-14 text-white mb-10 opacity-80" />
             <h3 className="text-5xl font-black mb-8 tracking-premium text-white leading-tight">Hyper-Workflow Orchestration</h3>
-            <p className="text-slate-500 text-xl leading-relaxed font-medium">
-              Seamlessly bridge the gap between human strategy and anonymous execution. Our engine manages thousands of nodes with perfect synchronization.
+            <p className="text-slate-300 text-xl leading-relaxed font-medium">
+              Seamlessly bridge the gap between human strategy and anonymous execution. Our engine manages thousands of nodes with perfect synchronization and zero data leakage.
             </p>
           </div>
           <div className="absolute right-[-5%] bottom-[-5%] w-1/2 opacity-20 group-hover:opacity-40 transition-all duration-1000 rotate-12 scale-110">
@@ -37,25 +37,25 @@ export const Features: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Intelligence Card */}
+        {/* Intelligence Card - Option 2 */}
         <motion.div 
           whileHover={{ y: -8 }}
-          className="col-span-12 lg:col-span-4 glass-panel p-12 rounded-[60px] relative overflow-hidden group"
+          className="col-span-12 lg:col-span-4 glass-panel p-12 rounded-[60px] relative overflow-hidden group border-fuchsia-500/20"
         >
           <div className="absolute top-0 right-0 p-8">
             <div className="w-2 h-2 rounded-full bg-fuchsia-500 animate-ping" />
           </div>
           <Bot className="w-12 h-12 text-fuchsia-400 mb-8" />
           <h3 className="text-2xl font-black mb-4 text-white tracking-premium">Elite Agents</h3>
-          <p className="text-slate-500 text-base leading-relaxed font-medium">
-            Trained on proprietary logic models to handle high-stakes decision making without intervention.
+          <p className="text-slate-400 text-base leading-relaxed font-medium">
+            Trained on proprietary logic models to handle high-stakes decision making without intervention, utilizing real-time web-grounding and mission-specific reasoning.
           </p>
         </motion.div>
 
         {/* Global Access Card */}
         <motion.div 
           whileHover={{ y: -8 }}
-          className="col-span-12 lg:col-span-4 glass-panel p-12 rounded-[60px] border-fuchsia-500/10"
+          className="col-span-12 lg:col-span-4 glass-panel p-12 rounded-[60px] border-white/5"
         >
           <Globe className="w-12 h-12 text-cyan-400 mb-8" />
           <h3 className="text-2xl font-black mb-4 text-white tracking-premium">Planetary Grid</h3>
@@ -79,7 +79,7 @@ export const Features: React.FC = () => {
         {/* Security Card */}
         <motion.div 
           whileHover={{ y: -8 }}
-          className="col-span-12 lg:col-span-8 glass-panel p-14 rounded-[60px] flex items-center justify-between group"
+          className="col-span-12 lg:col-span-8 glass-panel p-14 rounded-[60px] flex items-center justify-between group border-white/5"
         >
           <div className="max-w-md">
             <Shield className="w-12 h-12 text-emerald-400 mb-8" />

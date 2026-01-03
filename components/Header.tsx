@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Layers, Target, CreditCard, Sparkles } from 'lucide-react';
+import { Menu, X, ChevronDown, Layers, Target, CreditCard, Sparkles, Shield, Zap } from 'lucide-react';
 import { Logo } from './Logo';
 
 interface HeaderProps {
@@ -18,19 +18,22 @@ export const Header: React.FC<HeaderProps> = ({ onLaunch, onHomeClick }) => {
       name: 'Architecture', 
       href: '#product', 
       description: 'The technical backbone of Prism Nexus. Modular SDKs, sub-ms latency, and zero-trust security layers.',
-      icon: <Layers className="w-5 h-5" />
+      icon: <Layers className="w-5 h-5" />,
+      tag: 'Core System'
     },
     { 
       name: 'Solutions', 
       href: '#use-cases', 
       description: 'Tailored agentic workflows for Enterprise scale. Revenue Ops, Compliance, and CS automation.',
-      icon: <Target className="w-5 h-5" />
+      icon: <Target className="w-5 h-5" />,
+      tag: 'Use Cases'
     },
     { 
       name: 'Access', 
       href: '#pricing', 
       description: 'Scale your autonomous operations with modular pricing tiers built for any cluster size.',
-      icon: <CreditCard className="w-5 h-5" />
+      icon: <CreditCard className="w-5 h-5" />,
+      tag: 'Licensing'
     },
   ];
 
@@ -38,9 +41,9 @@ export const Header: React.FC<HeaderProps> = ({ onLaunch, onHomeClick }) => {
     <motion.header 
       initial={{ y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed top-0 left-0 right-0 z-50 px-8 py-8"
+      className="fixed top-0 left-0 right-0 z-[100] px-8 py-8 pointer-events-none"
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between glass-panel px-10 py-5 rounded-full relative">
+      <div className="max-w-7xl mx-auto flex items-center justify-between glass-panel px-10 py-5 rounded-full relative pointer-events-auto">
         <div onClick={onHomeClick} className="cursor-pointer">
           <Logo className="h-8" />
         </div>
@@ -56,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({ onLaunch, onHomeClick }) => {
             >
               <a 
                 href={link.href} 
-                className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-colors"
+                className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-colors py-2"
               >
                 {link.name}
                 <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${hoveredLink === link.name ? 'rotate-180 text-fuchsia-500' : ''}`} />
@@ -65,22 +68,31 @@ export const Header: React.FC<HeaderProps> = ({ onLaunch, onHomeClick }) => {
               <AnimatePresence>
                 {hoveredLink === link.name && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 p-6 glass-panel rounded-[32px] border-fuchsia-500/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 p-6 bg-[#0B0D15] rounded-[32px] border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-[110]"
                   >
                     <div className="flex items-center gap-4 mb-4">
                       <div className="w-10 h-10 bg-fuchsia-500/10 rounded-xl flex items-center justify-center border border-fuchsia-500/20 text-fuchsia-500">
                         {link.icon}
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-white">{link.name} Protocol</span>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white">{link.name}</span>
+                        <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-slate-500">{link.tag}</span>
+                      </div>
                     </div>
-                    <p className="text-[11px] leading-relaxed text-slate-400 font-medium">
+                    <p className="text-[11px] leading-relaxed text-slate-400 font-medium mb-4">
                       {link.description}
                     </p>
-                    <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-fuchsia-500/80">
-                      <Sparkles className="w-3 h-3" /> Initialize Node
+                    <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                       <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-fuchsia-500/80">
+                         <Sparkles className="w-3 h-3" /> Initialize Node
+                       </div>
+                       <div className="flex items-center gap-1.5">
+                         <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                         <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">Active</span>
+                       </div>
                     </div>
                   </motion.div>
                 )}
@@ -114,22 +126,25 @@ export const Header: React.FC<HeaderProps> = ({ onLaunch, onHomeClick }) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute top-full left-0 right-0 mt-6 p-8 glass-panel rounded-[40px] lg:hidden flex flex-col gap-6"
+              className="absolute top-full left-0 right-0 mt-6 p-8 bg-[#0B0D15] border border-white/10 rounded-[40px] lg:hidden flex flex-col gap-4 shadow-2xl"
             >
               {navLinks.map((link) => (
                 <a 
                   key={link.name} 
                   href={link.href} 
-                  className="group block p-6 rounded-3xl hover:bg-white/5 transition-all border border-transparent hover:border-white/5"
+                  className="group block p-5 rounded-3xl hover:bg-white/5 transition-all border border-transparent hover:border-white/5"
                   onClick={() => setIsOpen(false)}
                 >
                   <div className="flex items-center gap-4 mb-2">
-                    <div className="text-fuchsia-500">
+                    <div className="text-fuchsia-500 p-2 bg-fuchsia-500/10 rounded-xl">
                       {link.icon}
                     </div>
-                    <span className="text-xl font-black text-white tracking-tight">{link.name}</span>
+                    <div className="flex flex-col">
+                      <span className="text-lg font-black text-white tracking-tight">{link.name}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-600">{link.tag}</span>
+                    </div>
                   </div>
-                  <p className="text-[11px] text-slate-500 leading-relaxed font-medium pl-9">
+                  <p className="text-[11px] text-slate-500 leading-relaxed font-medium pl-14">
                     {link.description}
                   </p>
                 </a>
