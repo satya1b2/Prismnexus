@@ -8,62 +8,70 @@ import { DevExperience } from './components/DevExperience';
 import { Pricing } from './components/Pricing';
 import { Footer } from './components/Footer';
 import { NexusConsole } from './components/NexusConsole';
-import { AuthModal } from './components/AuthModal';
+import { PrivacyPage } from './components/PrivacyPage';
 import { FloatingChatbot } from './components/FloatingChatbot';
 import { AnimatePresence, motion } from 'framer-motion';
 
+type View = 'home' | 'privacy';
+
 const App: React.FC = () => {
+  const [view, setView] = useState<View>('home');
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isOwner, setIsOwner] = useState(false);
+  // Default to owner mode to provide full access to all features
+  const [isOwner] = useState(true);
 
   const handleLaunchRequest = () => {
-    if (isLoggedIn && isOwner) {
-      setIsConsoleOpen(true);
-    } else {
-      setIsAuthOpen(true);
-    }
-  };
-
-  const handleAuthSuccess = (ownerStatus: boolean) => {
-    setIsAuthOpen(false);
-    setIsLoggedIn(true);
-    setIsOwner(ownerStatus);
+    // Directly open console without authentication check
     setIsConsoleOpen(true);
   };
 
+  const navigateToHome = () => {
+    setView('home');
+    window.scrollTo(0, 0);
+  };
+
+  const navigateToPrivacy = () => {
+    setView('privacy');
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <div className="min-h-screen selection:bg-indigo-500/30">
-      {/* Background Gradients */}
-      <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[20%] right-[-10%] w-[30%] h-[30%] bg-cyan-400/5 blur-[100px] rounded-full" />
-      </div>
+    <div className="min-h-screen selection:bg-indigo-500/30 bg-[#020308]">
+      <AnimatePresence mode="wait">
+        {view === 'home' ? (
+          <motion.div 
+            key="home-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {/* Background Gradients */}
+            <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+              <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full" />
+              <div className="absolute bottom-[20%] right-[-10%] w-[30%] h-[30%] bg-cyan-400/5 blur-[100px] rounded-full" />
+            </div>
 
-      <Header onLaunch={handleLaunchRequest} />
-      
-      <main>
-        <Hero onStart={handleLaunchRequest} />
-        <Features />
-        <UseCases />
-        <DevExperience />
-        <Pricing onStart={handleLaunchRequest} />
-      </main>
+            <Header onLaunch={handleLaunchRequest} onHomeClick={navigateToHome} />
+            
+            <main>
+              <Hero onStart={handleLaunchRequest} />
+              <Features />
+              <UseCases />
+              <DevExperience />
+              <Pricing onStart={handleLaunchRequest} />
+            </main>
 
-      <Footer onLaunch={handleLaunchRequest} />
-
-      <FloatingChatbot />
-
-      <AnimatePresence>
-        {isAuthOpen && (
-          <AuthModal 
-            key="auth-modal"
-            onClose={() => setIsAuthOpen(false)} 
-            onSuccess={handleAuthSuccess} 
-          />
+            <Footer 
+              onLaunch={handleLaunchRequest} 
+              onPrivacyClick={navigateToPrivacy} 
+            />
+          </motion.div>
+        ) : (
+          <PrivacyPage key="privacy-view" onBack={navigateToHome} />
         )}
       </AnimatePresence>
+
+      <FloatingChatbot />
 
       <AnimatePresence>
         {isConsoleOpen && (

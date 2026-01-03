@@ -14,7 +14,7 @@ export const FloatingChatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'assistant', content: "Sovereign link established. I am the Nexus 3 Pro Agent. I leverage deep thinking and real-time grounding for complex mission logic. How shall we proceed?" }
+    { role: 'assistant', content: "Sovereign link established. I am the Nexus 2.5 Flash Agent. I leverage deep thinking and real-time grounding for complex mission logic. How shall we proceed?" }
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -35,17 +35,21 @@ export const FloatingChatbot: React.FC = () => {
     setIsTyping(true);
 
     try {
+      // Use process.env.API_KEY directly for initialization as per guidelines
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      
+      // Fix: Maps grounding is only supported in Gemini 2.5 series models.
       const stream = await ai.models.generateContentStream({
-        model: 'gemini-3-pro-preview',
+        model: 'gemini-2.5-flash',
         contents: [...messages, userMsg].map(m => ({
           role: m.role === 'user' ? 'user' : 'model',
           parts: [{ text: m.content }]
         })),
         config: {
-          systemInstruction: "You are the Prism Nexus 3 Pro Agent. You are highly intelligent, professional, and operate with surgical precision. Use 'Thinking Mode' for every response to ensure maximal accuracy and logic. You have real-time access to Google Search and Google Maps. For any factual query, always cross-reference the web. For location queries, provide maps links. Maintain the premium anonymous brand persona at all times.",
+          systemInstruction: "You are the Prism Nexus 2.5 Flash Agent. You are highly intelligent, professional, and operate with surgical precision. Use 'Thinking Mode' for every response to ensure maximal accuracy and logic. You have real-time access to Google Search and Google Maps. For any factual query, always cross-reference the web. For location queries, provide maps links. Maintain the premium anonymous brand persona at all times.",
           tools: [{ googleSearch: {} }, { googleMaps: {} }],
-          thinkingConfig: { thinkingBudget: 32768 } // Maximum thinking budget for Gemini 3 Pro
+          // Use appropriate thinking budget for gemini-2.5-flash (max 24576)
+          thinkingConfig: { thinkingBudget: 24576 }
         }
       });
 
@@ -56,6 +60,7 @@ export const FloatingChatbot: React.FC = () => {
       setMessages(prev => [...prev, { role: 'assistant', content: "" }]);
 
       for await (const chunk of stream) {
+        // Correct: Access the extracted string output using the .text property
         const textChunk = (chunk as GenerateContentResponse).text || "";
         assistantResponse += textChunk;
         
@@ -108,7 +113,7 @@ export const FloatingChatbot: React.FC = () => {
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-[#020308] animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-white font-black text-xl tracking-premium uppercase">Nexus 3 Pro</h3>
+                  <h3 className="text-white font-black text-xl tracking-premium uppercase">Nexus 2.5 Flash</h3>
                   <div className="flex items-center gap-2.5">
                     <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_15px_#4F46E5]" />
                     <span className="text-[11px] text-indigo-400 uppercase font-black tracking-[0.4em]">Reasoning Grid Active</span>
@@ -139,12 +144,12 @@ export const FloatingChatbot: React.FC = () => {
                       }`}>
                         {m.role === 'user' ? <User className="w-6 h-6" /> : <Brain className="w-6 h-6" />}
                       </div>
-                      <div className={`p-7 rounded-[36px] text-[15px] leading-[1.7] font-medium shadow-2xl ${
+                      <div className={`p-7 rounded-[36px] text-[15px] middle leading-[1.7] font-medium shadow-2xl ${
                         m.role === 'user' 
                           ? 'bg-white text-black rounded-tr-none' 
                           : 'bg-white/[0.04] border border-white/10 text-slate-200 rounded-tl-none backdrop-blur-md'
                       }`}>
-                        {m.content || (isTyping && i === messages.length - 1 ? <div className="flex gap-2.5 py-2.5"><span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce"/><span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.2s]"/><span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.4s]"/></div> : "")}
+                        {m.content || (isTyping && i === messages.length - 1 ? <div className="flex gap-2.5 py-2.5 middle"><span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce"/><span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.2s]"/><span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.4s]"/></div> : "")}
                       </div>
                     </div>
                     {m.sources && (
@@ -185,7 +190,7 @@ export const FloatingChatbot: React.FC = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Communicate with Nexus Pro..."
+                  placeholder="Communicate with Nexus..."
                   className="w-full bg-white/5 border border-white/10 rounded-[36px] px-10 py-6 pr-24 text-[16px] font-medium focus:outline-none focus:border-indigo-500/40 text-white placeholder:text-slate-700 transition-all group-hover:bg-white/[0.08] shadow-inner"
                 />
                 <button 

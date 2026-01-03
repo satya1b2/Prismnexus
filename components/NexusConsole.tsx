@@ -93,7 +93,8 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     setIsProcessing(true);
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Use process.env.API_KEY directly for initialization as per guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: mediaPrompt }] },
@@ -119,7 +120,8 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     setIsProcessing(true);
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Use process.env.API_KEY directly for initialization as per guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       let op = await ai.models.generateVideos({
         model: 'veo-3.1-fast-generate-preview',
         prompt: mediaPrompt,
@@ -154,7 +156,8 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     }
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Use process.env.API_KEY directly for initialization as per guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       audioContextRef.current = audioCtx;
       
@@ -221,10 +224,12 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     try {
       await checkApiKey();
       const coords = await getCoordinates();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Use process.env.API_KEY directly for initialization as per guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
+      // Fix: Maps grounding is only supported in Gemini 2.5 series models.
       const response = await ai.models.generateContent({
-        model: thinkingMode ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview',
+        model: 'gemini-2.5-flash',
         contents: [...chatHistory, userMsg].map(m => ({
           role: m.role === 'user' ? 'user' : 'model',
           parts: [{ text: m.content }]
@@ -234,7 +239,8 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
           toolConfig: coords ? {
             retrievalConfig: { latLng: { latitude: coords.lat, longitude: coords.lng } }
           } : undefined,
-          thinkingConfig: thinkingMode ? { thinkingBudget: 32768 } : undefined
+          // Use appropriate thinking budget for gemini-2.5-flash (max 24576)
+          thinkingConfig: thinkingMode ? { thinkingBudget: 24576 } : undefined
         }
       });
 
@@ -247,6 +253,7 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
 
       setChatHistory(prev => [...prev, { 
         role: 'assistant', 
+        // Directly access .text property as per guidelines
         content: response.text || "Command processed.",
         sources: sources.length > 0 ? sources : undefined
       }]);
@@ -261,10 +268,12 @@ export const NexusConsole: React.FC<{ onClose: () => void, isOwner?: boolean }> 
     setIsProcessing(true);
     try {
       await checkApiKey();
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Use process.env.API_KEY directly for initialization as per guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const base64 = await blobToBase64(uploadFile);
+      // Fix: Upgrade to gemini-3-pro-image-preview for search grounding with image inputs
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
+        model: 'gemini-3-pro-image-preview',
         contents: {
           parts: [
             { inlineData: { data: base64, mimeType: uploadFile.type } },
