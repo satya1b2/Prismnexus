@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { AnimatedPrism } from './AnimatedPrism';
 
 interface HeroProps {
@@ -10,7 +10,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onStart }) => {
   return (
-    <section className="relative pt-64 pb-32 px-6 max-w-[1400px] mx-auto overflow-visible">
+    <section className="relative pt-48 pb-32 px-6 max-w-[1400px] mx-auto overflow-visible">
       <div className="grid lg:grid-cols-2 gap-24 items-center relative z-10">
         <motion.div
           initial={{ y: 30, opacity: 0 }}

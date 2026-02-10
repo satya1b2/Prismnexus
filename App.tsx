@@ -10,6 +10,7 @@ import { Footer } from './components/Footer';
 import { NexusConsole } from './components/NexusConsole';
 import { PrivacyPage } from './components/PrivacyPage';
 import { FloatingChatbot } from './components/FloatingChatbot';
+import { LogoMarquee } from './components/LogoMarquee';
 import { AnimatePresence, motion } from 'framer-motion';
 
 type View = 'home' | 'privacy';
@@ -36,7 +37,12 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen selection:bg-indigo-500/30 bg-[#020308]">
+    <div className="min-h-screen selection:bg-indigo-500/30 bg-[#020308] relative">
+      {/* Floating Chatbot moved to the top level of the app container, 
+          outside of any motion transforms to ensure 'fixed' positioning 
+          stays attached to the viewport. */}
+      <FloatingChatbot />
+
       <AnimatePresence mode="wait">
         {view === 'home' ? (
           <motion.div 
@@ -55,6 +61,7 @@ const App: React.FC = () => {
             
             <main>
               <Hero onStart={handleLaunchRequest} />
+              <LogoMarquee />
               <Features />
               <UseCases />
               <DevExperience />
@@ -70,8 +77,6 @@ const App: React.FC = () => {
           <PrivacyPage key="privacy-view" onBack={navigateToHome} />
         )}
       </AnimatePresence>
-
-      <FloatingChatbot />
 
       <AnimatePresence>
         {isConsoleOpen && (

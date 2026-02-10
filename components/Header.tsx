@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Layers, Target, CreditCard, Sparkles, Shield, Zap } from 'lucide-react';
+import { Menu, X, ChevronDown, Layers, Target, Sparkles } from 'lucide-react';
 import { Logo } from './Logo';
 
 interface HeaderProps {
@@ -27,14 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ onLaunch, onHomeClick }) => {
       description: 'Tailored agentic workflows for Enterprise scale. Revenue Ops, Compliance, and CS automation.',
       icon: <Target className="w-5 h-5" />,
       tag: 'Use Cases'
-    },
-    { 
-      name: 'Access', 
-      href: '#pricing', 
-      description: 'Scale your autonomous operations with modular pricing tiers built for any cluster size.',
-      icon: <CreditCard className="w-5 h-5" />,
-      tag: 'Licensing'
-    },
+    }
   ];
 
   return (
